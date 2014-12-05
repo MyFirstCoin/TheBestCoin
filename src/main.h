@@ -30,13 +30,13 @@ static const unsigned int MAX_BLOCK_SIZE_GEN = MAX_BLOCK_SIZE/2;
 static const unsigned int MAX_BLOCK_SIGOPS = MAX_BLOCK_SIZE/50;
 static const unsigned int MAX_ORPHAN_TRANSACTIONS = MAX_BLOCK_SIZE/100;
 static const unsigned int MAX_INV_SZ = 50000;
-static const int64 MIN_TX_FEE = 1.0 * CENT;
-static const int64 MIN_RELAY_TX_FEE = 1.0 * CENT;
-static const int64 MAX_MONEY = 2500000000 * COIN;			// 2.5 bil
-static const int64 MAX_MINT_PROOF_OF_STAKE = 0.01 * COIN;	// 1% annual interest
+static const int64 MIN_TX_FEE = .001 * CENT;
+static const int64 MIN_RELAY_TX_FEE = .001 * CENT;
+static const int64 MAX_MONEY = 40000000 * COIN;			// 40 Mill
+static const int64 MAX_MINT_PROOF_OF_STAKE = 0.1 * COIN;	// 10% annual interest
 static const int64 MIN_TXOUT_AMOUNT = MIN_TX_FEE;
 
-static const int POW_CUTOFF_BLOCK = 20000;
+static const int POW_CUTOFF_BLOCK = 1440;
 
 inline bool MoneyRange(int64 nValue) { return (nValue >= 0 && nValue <= MAX_MONEY); }
 // Threshold for nLockTime: below this value it is interpreted as block number, otherwise as UNIX timestamp.
@@ -588,7 +588,7 @@ public:
     {
         // Large (in bytes) low-priority (new, small-coin) transactions
         // need a fee.
-        return dPriority > COIN * 1440 / 250;
+        return dPriority > COIN * 720 / 250;
     }
 
     int64 GetMinFee(unsigned int nBlockSize=1, bool fAllowFree=false, enum GetMinFee_mode mode=GMF_BLOCK, unsigned int nBytes = 0) const;

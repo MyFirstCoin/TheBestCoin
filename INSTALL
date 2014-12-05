@@ -1,9 +1,9 @@
-Building CommunityCoin
+Building TheBestCoin
 
-See doc/readme-qt.rst for instructions on building CommunityCoin QT,
+See doc/readme-qt.rst for instructions on building TheBestCoin QT,
 the intended-for-end-users, nice-graphical-interface, reference
-implementation of CommunityCoin.
+implementation of TheBestCoin.
 
-See doc/build-*.txt for instructions on building CommunityCoind,
+See doc/build-*.txt for instructions on building TheBestCoind,
 the intended-for-services, no-graphical-interface, reference
-implementation of CommunityCoin.
+implementation of TheBestCoin.

@@ -42,8 +42,8 @@ static CBigNum bnProofOfWorkLimitTestNet(~uint256(0) >> 20);
 static CBigNum bnProofOfStakeLimitTestNet(~uint256(0) >> 20);
 
 unsigned int nStakeMinAge = 60 * 60 * 24 * 1;	// minimum age for coin age: 1d
-unsigned int nStakeMaxAge = 60 * 60 * 24 * 100;	// stake age of full weight: 100d
-unsigned int nStakeTargetSpacing = 60;			// 60 sec block spacing
+unsigned int nStakeMaxAge = 60 * 60 * 24 * 14;	// stake age of full weight: 14d
+unsigned int nStakeTargetSpacing = 120;			// 120 sec block spacing
 
 int64 nChainStartTime = 1395376312;
 int nCoinbaseMaturity = 30;
@@ -68,7 +68,7 @@ map<uint256, map<uint256, CDataStream*> > mapOrphanTransactionsByPrev;
 // Constant stuff for coinbase transactions we create:
 CScript COINBASE_FLAGS;
 
-const string strMessageMagic = "CommunityCoin Signed Message:\n";
+const string strMessageMagic = "TheBestCoin Signed Message:\n";
 
 double dHashesPerSec;
 int64 nHPSTimerStart;
@@ -963,9 +963,9 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 {
 	int64 nSubsidy = 0.0 * COIN;
 
-	if(nHeight == 1)
+	if(nHeight <= 1440)
 	{
-		nSubsidy = 1000000000 * COIN;	// 1 billion coins, that all pow coins
+		nSubsidy = 10000 * COIN;	// 1 billion coins, that all pow coins
 		return nSubsidy + nFees;
 	}
 
@@ -974,22 +974,14 @@ int64 GetProofOfWorkReward(int nHeight, int64 nFees, uint256 prevHash)
 
 // miner's coin stake reward based on nBits and coin age spent (coin-days)
 // simple algorithm, not depend on the diff
-const int YEARLY_BLOCKCOUNT = 525600;	// 365 * 1440 
+const int WEEKLY_BLOCKCOUNT = 5040;	// 720 * 2 
 int64 GetProofOfStakeReward(int64 nCoinAge, unsigned int nBits, unsigned int nTime, int nHeight)
 {
     int64 nRewardCoinYear;
 	nRewardCoinYear = MAX_MINT_PROOF_OF_STAKE;
 
-	if(nHeight < YEARLY_BLOCKCOUNT)
-		nRewardCoinYear = 30 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (2 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 20 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (3 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 10 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (4 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 5 * MAX_MINT_PROOF_OF_STAKE;
-	else if(nHeight < (5 * YEARLY_BLOCKCOUNT))
-		nRewardCoinYear = 2 * MAX_MINT_PROOF_OF_STAKE;
+	if(nHeight < 2 * WEEKLY_BLOCKCOUNT)
+		nRewardCoinYear = 500 * MAX_MINT_PROOF_OF_STAKE;
 
     int64 nSubsidy = nCoinAge * nRewardCoinYear / 365;
 	if (fDebug && GetBoolArg("-printcreation"))
@@ -1516,8 +1508,8 @@ bool CBlock::ConnectBlock(CTxDB& txdb, CBlockIndex* pindex, bool fJustCheck)
     // Now that the whole chain is irreversibly beyond that time it is applied to all blocks except the
     // two in the chain that violate it. This prevents exploiting the issue against nodes in their
     // initial block download.
-    bool fEnforceBIP30 = true; // Always active in CommunityCoin
-    bool fStrictPayToScriptHash = true; // Always active in CommunityCoin
+    bool fEnforceBIP30 = true; // Always active in TheBestCoin
+    bool fStrictPayToScriptHash = true; // Always active in TheBestCoin
 
     //// issue here: it doesn't know the version
     unsigned int nTxPos;
@@ -2484,7 +2476,7 @@ bool CheckDiskSpace(uint64 nAdditionalBytes)
         string strMessage = _("Warning: Disk space is low!");
         strMiscWarning = strMessage;
         printf("*** %s\n", strMessage.c_str());
-        uiInterface.ThreadSafeMessageBox(strMessage, "CommunityCoin", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
+        uiInterface.ThreadSafeMessageBox(strMessage, "TheBestCoin", CClientUIInterface::OK | CClientUIInterface::ICON_EXCLAMATION | CClientUIInterface::MODAL);
         StartShutdown();
         return false;
     }
